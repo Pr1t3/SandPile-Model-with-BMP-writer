@@ -122,7 +122,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
     return true;
 }
 
-bool MakeArguments(char** possible_arguments, int size, Arguments& arguments, Flags& flags) {
+bool MakeArguments(char** possible_arguments, int size) {
     for (int i = 0; i < size; ++i) {
         bool is_it_name = true;
         int size_of_temp_name = 0;
@@ -151,51 +151,51 @@ bool MakeArguments(char** possible_arguments, int size, Arguments& arguments, Fl
             }
         }
         if (strcmp(temp_name, "-i") == 0 || strcmp(temp_name, "--input") == 0) {
-            if (!flags.is_input_file_alone) {
+            if (!Flags::is_input_file_alone) {
                 std::cerr << "Wrong Input. There is more than 1 argument(-o, --output)";
                 delete[]  temp_name;
                 delete[]  temp_value;
                 return false;
             }
-            delete[] arguments.input_file;
-            arguments.input_file = new char[size_of_temp_value + 1];
-            arguments.input_file[size_of_temp_value] = '\0';
+            delete[] Arguments::input_file;
+            Arguments::input_file = new char[size_of_temp_value + 1];
+            Arguments::input_file[size_of_temp_value] = '\0';
             for (int i = 0; i < size_of_temp_value; ++i) {
-                arguments.input_file[i] = temp_value[i];
+                Arguments::input_file[i] = temp_value[i];
             }
-            flags.is_input_file_alone = false;
+            Flags::is_input_file_alone = false;
         } else if (strcmp(temp_name, "-o") == 0 || strcmp(temp_name, "--output") == 0) {
-            if (!flags.is_output_file_alone) {
+            if (!Flags::is_output_file_alone) {
                 std::cerr << "Wrong Input. There is more than 1 argument(-o, --output)";
                 delete[]  temp_name;
                 delete[]  temp_value;
                 return false;
             }
-            delete[] arguments.output_file;
-            arguments.output_file = new char[size_of_temp_value + 1];
-            arguments.output_file[size_of_temp_value] = '\0';
+            delete[] Arguments::output_file;
+            Arguments::output_file = new char[size_of_temp_value + 1];
+            Arguments::output_file[size_of_temp_value] = '\0';
             for (int i = 0; i < size_of_temp_value; ++i) {
-                arguments.output_file[i] = temp_value[i];
+                Arguments::output_file[i] = temp_value[i];
             }
-            flags.is_output_file_alone = false;
+            Flags::is_output_file_alone = false;
         } else if (strcmp(temp_name, "-m") == 0 || strcmp(temp_name, "--max-iter") == 0) {
-            if (!flags.is_max_iter_alone) {
+            if (!Flags::is_max_iter_alone) {
                 std::cerr << "Wrong Input. There is more than 1 argument(-m, --max-iter)";
                 delete[]  temp_name;
                 delete[]  temp_value;
                 return false;
             }
-            ConvertFromCharsToInt(size_of_temp_value, temp_value, arguments.max_iter);
-            flags.is_max_iter_alone = false;
+            ConvertFromCharsToInt(size_of_temp_value, temp_value, Arguments::max_iter);
+            Flags::is_max_iter_alone = false;
         } else if (strcmp(temp_name, "-f") == 0 || strcmp(temp_name, "--freq") == 0) {
-            if (!flags.is_freq_alone) {
+            if (!Flags::is_freq_alone) {
                 std::cerr << "Wrong Input. There is more than 1 argument(-f, --freq)";
                 delete[]  temp_name;
                 delete[]  temp_value;
                 return false;
             }
-            ConvertFromCharsToInt(size_of_temp_value, temp_value, arguments.freq);
-            flags.is_freq_alone = false;
+            ConvertFromCharsToInt(size_of_temp_value, temp_value, Arguments::freq);
+            Flags::is_freq_alone = false;
         } else {
             std::cerr << "Wrong Input. There is no such argument";
             delete[]  temp_name;
