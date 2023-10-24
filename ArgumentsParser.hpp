@@ -1,11 +1,13 @@
 #pragma once
 
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include <charconv>
-#include <math.h>
+#include <cmath>
 
 #include "Structures.hpp"
+
+int SizeOfString(const char* string);
 
 bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_of_possible_arguments);
 

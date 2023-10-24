@@ -2,7 +2,7 @@
 
 int SizeOfString(const char* string) {
     int index = 0;
-    while (string[index] != '\0') {
+    while (string[index] != '\0' && ((static_cast<int>(string[index]) >= 33 && static_cast<int>(string[index]) <= 126) || static_cast<int>(string[index]) < 0)) {
         ++index;
     }
     return index;
@@ -25,26 +25,29 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
     char* temp = new char[0];
     char** temp_argv = new char* [argc];
     for (int i = 1; i < argc; ++i) {
-        temp_argv[i - 1] = new char[SizeOfString(argv[i])];
+        temp_argv[i - 1] = new char[SizeOfString(argv[i])+1];
         for (int j = 0; j < SizeOfString(argv[i]); ++j) {
             temp_argv[i - 1][j] = argv[i][j];
         }
+        temp_argv[i-1][SizeOfString(argv[i])] = '\0';
     }
     int index = 0;
     for (int i = 0; i < argc - 1; ++i) {
         if (temp_argv[i][0] == '-' && SizeOfString(temp) == 0) {
             memset(temp, 0, SizeOfString(temp));
             delete[] temp;
-            temp = new char[SizeOfString(temp_argv[i])];
+            temp = new char[SizeOfString(temp_argv[i])+1];
             memset(temp, 0, SizeOfString(temp));
             for (int j = 0; j < SizeOfString(temp_argv[i]); ++j) {
                 temp[j] = temp_argv[i][j];
             }
+            temp[SizeOfString(temp_argv[i])] = '\0';
             for (int j = 0; j < SizeOfString(temp_argv[i]); ++j) {
                 if (temp_argv[i][j] == '=') {
                     for (int k = 0; k < SizeOfString(temp); ++k) {
                         possible_arguments[index][k] = temp[k];
                     }
+                    possible_arguments[index][SizeOfString(temp)+1] = '\0';
                     ++index;
                     ++cnt_of_possible_arguments;
                     memset(temp, 0, SizeOfString(temp));
@@ -60,6 +63,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
             for (int k = 0; k < SizeOfString(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
+            possible_arguments[index][SizeOfString(temp)+1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
             memset(temp, 0, SizeOfString(temp));
@@ -71,6 +75,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
             for (int k = 0; k < SizeOfString(temp); ++k) {
                 possible_arguments[index][k] = temp_argv[i][k];
             }
+            possible_arguments[index][SizeOfString(temp)+1] = '\0';
         } else if (temp_argv[i][0] != '-' && SizeOfString(temp) != 0) {
             char* temp_temp = new char[SizeOfString(temp)];
             memset(temp_temp, 0, SizeOfString(temp_temp));
@@ -93,6 +98,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
             for (int k = 0; k < SizeOfString(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
+            possible_arguments[index][SizeOfString(temp)+1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
             memset(temp, 0, SizeOfString(temp));
@@ -110,6 +116,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
             for (int k = 0; k < SizeOfString(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
+            possible_arguments[index][SizeOfString(temp)+1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
             delete[] temp;
@@ -138,9 +145,9 @@ bool MakeArguments(char** possible_arguments, int size) {
         }
         is_it_name = true;
         char* temp_name = new char[size_of_temp_name + 1];
-        temp_name[size_of_temp_name] = '\0';
+
         char* temp_value = new char[size_of_temp_value + 1];
-        temp_value[size_of_temp_value] = '\0';
+
         for (int j = 0; j < SizeOfString(possible_arguments[i]); ++j) {
             if (possible_arguments[i][j] == '=') {
                 is_it_name = false;
@@ -150,6 +157,8 @@ bool MakeArguments(char** possible_arguments, int size) {
                 temp_value[j - size_of_temp_name - 1] = possible_arguments[i][j];
             }
         }
+        temp_name[size_of_temp_name] = '\0';
+        temp_value[size_of_temp_value] = '\0';
         if (strcmp(temp_name, "-i") == 0 || strcmp(temp_name, "--input") == 0) {
             if (!Flags::is_input_file_alone) {
                 std::cerr << "Wrong Input. There is more than 1 argument(-o, --output)";
@@ -171,11 +180,11 @@ bool MakeArguments(char** possible_arguments, int size) {
                 delete[]  temp_value;
                 return false;
             }
-            delete[] Arguments::output_file;
-            Arguments::output_file = new char[size_of_temp_value + 1];
-            Arguments::output_file[size_of_temp_value] = '\0';
+            delete[] Arguments::output_folder;
+            Arguments::output_folder = new char[size_of_temp_value + 1];
+            Arguments::output_folder[size_of_temp_value] = '\0';
             for (int i = 0; i < size_of_temp_value; ++i) {
-                Arguments::output_file[i] = temp_value[i];
+                Arguments::output_folder[i] = temp_value[i];
             }
             Flags::is_output_file_alone = false;
         } else if (strcmp(temp_name, "-m") == 0 || strcmp(temp_name, "--max-iter") == 0) {

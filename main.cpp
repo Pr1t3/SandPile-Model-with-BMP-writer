@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     }
     char** possible_arguments = new char*[argc-1];
     for(int i = 0; i < argc-1; ++i){
-        possible_arguments[i] = new char[max_cnt_symbols];
+        possible_arguments[i] = new char[max_cnt_symbols+1];
     }
     bool is_ok;
     int cnt_of_possible_arguments = 0;

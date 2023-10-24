@@ -2,10 +2,9 @@
 
 #include <limits>
 #include <cstdint>
-
 struct Arguments{
     inline static char* input_file = new char[1];
-    inline static char* output_file = new char[1];
+    inline static char* output_folder = new char[1];
     inline static uint64_t max_iter = 0;
     inline static uint64_t freq = 0;
 };
