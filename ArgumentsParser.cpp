@@ -1,42 +1,21 @@
 #include "ArgumentsParser.hpp"
 
-int SizeOfString(const char* string) {
-    int index = 0;
-    while (string[index] != '\0' && ((static_cast<int>(string[index]) >= 33 && static_cast<int>(string[index]) <= 126) || static_cast<int>(string[index]) < 0)) {
-        ++index;
-    }
-    return index;
-}
-
-bool ConvertFromCharsToInt(int size, const char* string, u_int64_t& lines) {
-    int result = 0;
-    for (int i = 0; i < size; ++i) {
-        if (std::isdigit(string[i])) {
-            result += pow(10, size - i - 1) * (string[i] - '0');
-        } else {
-            return false;
-        }
-    }
-    lines = result;
-    return true;
-}
-
 bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_of_possible_arguments) {
     char* temp = new char[0];
     char** temp_argv = new char* [argc];
     for (int i = 1; i < argc; ++i) {
-        temp_argv[i - 1] = new char[SizeOfString(argv[i])+1];
+        temp_argv[i - 1] = new char[SizeOfString(argv[i]) + 1];
         for (int j = 0; j < SizeOfString(argv[i]); ++j) {
             temp_argv[i - 1][j] = argv[i][j];
         }
-        temp_argv[i-1][SizeOfString(argv[i])] = '\0';
+        temp_argv[i - 1][SizeOfString(argv[i])] = '\0';
     }
     int index = 0;
     for (int i = 0; i < argc - 1; ++i) {
         if (temp_argv[i][0] == '-' && SizeOfString(temp) == 0) {
             memset(temp, 0, SizeOfString(temp));
             delete[] temp;
-            temp = new char[SizeOfString(temp_argv[i])+1];
+            temp = new char[SizeOfString(temp_argv[i]) + 1];
             memset(temp, 0, SizeOfString(temp));
             for (int j = 0; j < SizeOfString(temp_argv[i]); ++j) {
                 temp[j] = temp_argv[i][j];
@@ -47,7 +26,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
                     for (int k = 0; k < SizeOfString(temp); ++k) {
                         possible_arguments[index][k] = temp[k];
                     }
-                    possible_arguments[index][SizeOfString(temp)+1] = '\0';
+                    possible_arguments[index][SizeOfString(temp) + 1] = '\0';
                     ++index;
                     ++cnt_of_possible_arguments;
                     memset(temp, 0, SizeOfString(temp));
@@ -63,7 +42,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
             for (int k = 0; k < SizeOfString(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
-            possible_arguments[index][SizeOfString(temp)+1] = '\0';
+            possible_arguments[index][SizeOfString(temp) + 1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
             memset(temp, 0, SizeOfString(temp));
@@ -75,7 +54,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
             for (int k = 0; k < SizeOfString(temp); ++k) {
                 possible_arguments[index][k] = temp_argv[i][k];
             }
-            possible_arguments[index][SizeOfString(temp)+1] = '\0';
+            possible_arguments[index][SizeOfString(temp) + 1] = '\0';
         } else if (temp_argv[i][0] != '-' && SizeOfString(temp) != 0) {
             char* temp_temp = new char[SizeOfString(temp)];
             memset(temp_temp, 0, SizeOfString(temp_temp));
@@ -98,7 +77,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
             for (int k = 0; k < SizeOfString(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
-            possible_arguments[index][SizeOfString(temp)+1] = '\0';
+            possible_arguments[index][SizeOfString(temp) + 1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
             memset(temp, 0, SizeOfString(temp));
@@ -116,7 +95,7 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
             for (int k = 0; k < SizeOfString(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
-            possible_arguments[index][SizeOfString(temp)+1] = '\0';
+            possible_arguments[index][SizeOfString(temp) + 1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
             delete[] temp;

@@ -11,4 +11,8 @@ add_executable(labwork3_Pr1t3
         main.cpp
         Structures.hpp
         SandPileLogic.cpp
-        SandPileLogic.h)
+        SandPileLogic.h
+        utilities.cpp
+        utilities.h
+        BMPFileMaker.h
+        BMPFilerMaker.cpp)
