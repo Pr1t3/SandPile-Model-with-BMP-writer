@@ -1,24 +1,25 @@
 #include "BMPFileMaker.h"
 
 char* makeFileName(int64_t count_of_pictures) {
-    char* name = new char[static_cast<int>(ceil(log10(count_of_pictures + 1))) + 1];
-    name = ConvertFromIntToChars(count_of_pictures, name);
-    name[static_cast<int>(ceil(log10(count_of_pictures + 1)))] = '\0';
-    char* filename = new char[SizeOfString(Arguments::output_folder) + SizeOfString(name) + 6];
-    for (int64_t i = 0; i < SizeOfString(Arguments::output_folder) + SizeOfString(name) + 1; ++i) {
-        if (i < SizeOfString(Arguments::output_folder)) {
+    size_t size_of_name = static_cast<int>(ceil(log10(count_of_pictures + 1)));
+    size_t size_of_output_folder = std::strlen(Arguments::output_folder);
+    char* name = new char[size_of_name];
+    std::to_chars(name, name + size_of_name + 1, count_of_pictures);
+    char* filename = new char[size_of_output_folder + size_of_name + 6];
+    for (int64_t i = 0; i < size_of_output_folder + size_of_name + 1; ++i) {
+        if (i < size_of_output_folder) {
             filename[i] = Arguments::output_folder[i];
-        } else if (i == SizeOfString(Arguments::output_folder)) {
+        } else if (i == size_of_output_folder) {
             filename[i] = '\\';
         } else {
-            filename[i] = name[i - SizeOfString(Arguments::output_folder) - 1];
+            filename[i] = name[i - size_of_output_folder - 1];
         }
     }
-    filename[SizeOfString(Arguments::output_folder) + SizeOfString(name) + 1] = '.';
-    filename[SizeOfString(Arguments::output_folder) + SizeOfString(name) + 2] = 'b';
-    filename[SizeOfString(Arguments::output_folder) + SizeOfString(name) + 3] = 'm';
-    filename[SizeOfString(Arguments::output_folder) + SizeOfString(name) + 4] = 'p';
-    filename[SizeOfString(Arguments::output_folder) + SizeOfString(name) + 5] = '\0';
+    filename[size_of_output_folder + size_of_name + 1] = '.';
+    filename[size_of_output_folder + size_of_name + 2] = 'b';
+    filename[size_of_output_folder + size_of_name + 3] = 'm';
+    filename[size_of_output_folder + size_of_name + 4] = 'p';
+    filename[size_of_output_folder + size_of_name + 5] = '\0';
     delete[] name;
     return filename;
 }
@@ -46,10 +47,14 @@ struct BMPHeader {
 
 #pragma pack(pop)
 
-void saveBMP(char* filename) {
+void saveBMP(char* filename, Field& main_field) {
     std::ofstream file(filename, std::ios::binary);
-    const int width = Field::x_size;
-    const int height = Field::y_size;
+    if (!file.is_open()) {
+        std::cerr << "Output folder not Found";
+        exit(EXIT_FAILURE);
+    }
+    const int width = main_field.x_size;
+    const int height = main_field.y_size;
     int width_in_byte = ceil(static_cast<double>(width) / 2);
     int padding = (4 - width_in_byte % 4) % 4;
 
@@ -79,7 +84,7 @@ void saveBMP(char* filename) {
         uint8_t pixels = 0x00;
         int count = 0;
         for (int j = 0; j < width; ++j) {
-            switch (Field::field[i][j]) {
+            switch (main_field.main_field[i][j]) {
                 case 0:
                     pixels |= 0x00;
                     break;
@@ -105,10 +110,11 @@ void saveBMP(char* filename) {
             }
         }
         if (pixels != 0x00) {
-            row[(count + 2) / 2 - 1] = pixels;// |= 0x00;
+            row[(count + 2) / 2 - 1] = pixels;
         }
         file.write(reinterpret_cast<char*>(row), width_in_byte + padding);
     }
+    delete[] row;
     delete[] filename;
     file.close();
 }

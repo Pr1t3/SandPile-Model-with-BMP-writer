@@ -25,9 +25,13 @@ int main(int argc, char** argv) {
         is_ok = MakeArguments(possible_arguments, cnt_of_possible_arguments);
         if (is_ok) {
             std::ifstream input_file(Arguments::input_file);
-            if (IsFileOpened(input_file)) {
-                SandPile(input_file);
+            input_file.open(Arguments::input_file);
+            if (!input_file.is_open()) {
+                std::cerr << "File not found";
+                exit(EXIT_FAILURE);
             }
+            Field main_field;
+            SandPile(input_file, main_field);
         }
     }
     for (int i = 0; i < cnt_of_possible_arguments; ++i) {

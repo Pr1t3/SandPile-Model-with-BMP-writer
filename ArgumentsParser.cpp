@@ -4,98 +4,98 @@ bool ParseArguments(int argc, char** argv, char** possible_arguments, int& cnt_o
     char* temp = new char[0];
     char** temp_argv = new char* [argc];
     for (int i = 1; i < argc; ++i) {
-        temp_argv[i - 1] = new char[SizeOfString(argv[i]) + 1];
-        for (int j = 0; j < SizeOfString(argv[i]); ++j) {
+        temp_argv[i - 1] = new char[std::strlen(argv[i]) + 1];
+        for (int j = 0; j < std::strlen(argv[i]); ++j) {
             temp_argv[i - 1][j] = argv[i][j];
         }
-        temp_argv[i - 1][SizeOfString(argv[i])] = '\0';
+        temp_argv[i - 1][std::strlen(argv[i])] = '\0';
     }
     int index = 0;
     for (int i = 0; i < argc - 1; ++i) {
-        if (temp_argv[i][0] == '-' && SizeOfString(temp) == 0) {
-            memset(temp, 0, SizeOfString(temp));
+        if (temp_argv[i][0] == '-' && std::strlen(temp) == 0) {
+            memset(temp, 0, std::strlen(temp));
             delete[] temp;
-            temp = new char[SizeOfString(temp_argv[i]) + 1];
-            memset(temp, 0, SizeOfString(temp));
-            for (int j = 0; j < SizeOfString(temp_argv[i]); ++j) {
+            temp = new char[std::strlen(temp_argv[i]) + 1];
+            memset(temp, 0, std::strlen(temp));
+            for (int j = 0; j < std::strlen(temp_argv[i]); ++j) {
                 temp[j] = temp_argv[i][j];
             }
-            temp[SizeOfString(temp_argv[i])] = '\0';
-            for (int j = 0; j < SizeOfString(temp_argv[i]); ++j) {
+            temp[std::strlen(temp_argv[i])] = '\0';
+            for (int j = 0; j < std::strlen(temp_argv[i]); ++j) {
                 if (temp_argv[i][j] == '=') {
-                    for (int k = 0; k < SizeOfString(temp); ++k) {
+                    for (int k = 0; k < std::strlen(temp); ++k) {
                         possible_arguments[index][k] = temp[k];
                     }
-                    possible_arguments[index][SizeOfString(temp) + 1] = '\0';
+                    possible_arguments[index][std::strlen(temp) + 1] = '\0';
                     ++index;
                     ++cnt_of_possible_arguments;
-                    memset(temp, 0, SizeOfString(temp));
+                    memset(temp, 0, std::strlen(temp));
                     delete[] temp;
                     if (i != argc - 1) {
                         temp = new char[1];
-                        memset(temp, 0, SizeOfString(temp));
+                        memset(temp, 0, std::strlen(temp));
                     }
                     break;
                 }
             }
-        } else if (temp_argv[i][0] == '-' && SizeOfString(temp) != 0) {
-            for (int k = 0; k < SizeOfString(temp); ++k) {
+        } else if (temp_argv[i][0] == '-' && std::strlen(temp) != 0) {
+            for (int k = 0; k < std::strlen(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
-            possible_arguments[index][SizeOfString(temp) + 1] = '\0';
+            possible_arguments[index][std::strlen(temp) + 1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
-            memset(temp, 0, SizeOfString(temp));
+            memset(temp, 0, std::strlen(temp));
             delete[] temp;
             if (i != argc - 1) {
                 temp = new char[1];
-                memset(temp, 0, SizeOfString(temp));
+                memset(temp, 0, std::strlen(temp));
             }
-            for (int k = 0; k < SizeOfString(temp); ++k) {
+            for (int k = 0; k < std::strlen(temp); ++k) {
                 possible_arguments[index][k] = temp_argv[i][k];
             }
-            possible_arguments[index][SizeOfString(temp) + 1] = '\0';
-        } else if (temp_argv[i][0] != '-' && SizeOfString(temp) != 0) {
-            char* temp_temp = new char[SizeOfString(temp)];
-            memset(temp_temp, 0, SizeOfString(temp_temp));
-            for (int j = 0; j < SizeOfString(temp); ++j) {
+            possible_arguments[index][std::strlen(temp) + 1] = '\0';
+        } else if (temp_argv[i][0] != '-' && std::strlen(temp) != 0) {
+            char* temp_temp = new char[std::strlen(temp)];
+            memset(temp_temp, 0, std::strlen(temp_temp));
+            for (int j = 0; j < std::strlen(temp); ++j) {
                 temp_temp[j] = temp[j];
             }
-            memset(temp, 0, SizeOfString(temp));
+            memset(temp, 0, std::strlen(temp));
             delete[] temp;
-            temp = new char[SizeOfString(temp_temp) + SizeOfString(temp_argv[i]) + 1];
-            memset(temp, 0, SizeOfString(temp));
-            for (int j = 0; j < SizeOfString(temp_temp) + SizeOfString(temp_argv[i]) + 1; ++j) {
-                if (j < SizeOfString(temp_temp)) {
+            temp = new char[std::strlen(temp_temp) + std::strlen(temp_argv[i]) + 1];
+            memset(temp, 0, std::strlen(temp));
+            for (int j = 0; j < std::strlen(temp_temp) + std::strlen(temp_argv[i]) + 1; ++j) {
+                if (j < std::strlen(temp_temp)) {
                     temp[j] = temp_temp[j];
-                } else if (j == SizeOfString(temp_temp)) {
+                } else if (j == std::strlen(temp_temp)) {
                     temp[j] = '=';
                 } else {
-                    temp[j] = temp_argv[i][j - SizeOfString(temp_temp) - 1];
+                    temp[j] = temp_argv[i][j - std::strlen(temp_temp) - 1];
                 }
             }
-            for (int k = 0; k < SizeOfString(temp); ++k) {
+            for (int k = 0; k < std::strlen(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
-            possible_arguments[index][SizeOfString(temp) + 1] = '\0';
+            possible_arguments[index][std::strlen(temp) + 1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
-            memset(temp, 0, SizeOfString(temp));
+            memset(temp, 0, std::strlen(temp));
             delete[] temp;
             if (i != argc - 1) {
                 temp = new char[1];
-                memset(temp, 0, SizeOfString(temp));
+                memset(temp, 0, std::strlen(temp));
             }
             delete[] temp_temp;
         } else {
             std::cerr << "Wrong Input";
             return false;
         }
-        if (i == argc - 2 && SizeOfString(temp) != 0) {
-            for (int k = 0; k < SizeOfString(temp); ++k) {
+        if (i == argc - 2 && std::strlen(temp) != 0) {
+            for (int k = 0; k < std::strlen(temp); ++k) {
                 possible_arguments[index][k] = temp[k];
             }
-            possible_arguments[index][SizeOfString(temp) + 1] = '\0';
+            possible_arguments[index][std::strlen(temp) + 1] = '\0';
             ++index;
             ++cnt_of_possible_arguments;
             delete[] temp;
@@ -113,7 +113,7 @@ bool MakeArguments(char** possible_arguments, int size) {
         bool is_it_name = true;
         int size_of_temp_name = 0;
         int size_of_temp_value = 0;
-        for (int j = 0; j < SizeOfString(possible_arguments[i]); ++j) {
+        for (int j = 0; j < std::strlen(possible_arguments[i]); ++j) {
             if (possible_arguments[i][j] == '=') {
                 is_it_name = false;
             } else if (is_it_name) {
@@ -127,7 +127,7 @@ bool MakeArguments(char** possible_arguments, int size) {
 
         char* temp_value = new char[size_of_temp_value + 1];
 
-        for (int j = 0; j < SizeOfString(possible_arguments[i]); ++j) {
+        for (int j = 0; j < std::strlen(possible_arguments[i]); ++j) {
             if (possible_arguments[i][j] == '=') {
                 is_it_name = false;
             } else if (is_it_name) {
@@ -173,7 +173,7 @@ bool MakeArguments(char** possible_arguments, int size) {
                 delete[]  temp_value;
                 return false;
             }
-            ConvertFromCharsToInt(size_of_temp_value, temp_value, Arguments::max_iter);
+            std::from_chars(temp_value, temp_value+size_of_temp_value, Arguments::max_iter);
             Flags::is_max_iter_alone = false;
         } else if (strcmp(temp_name, "-f") == 0 || strcmp(temp_name, "--freq") == 0) {
             if (!Flags::is_freq_alone) {
@@ -182,7 +182,7 @@ bool MakeArguments(char** possible_arguments, int size) {
                 delete[]  temp_value;
                 return false;
             }
-            ConvertFromCharsToInt(size_of_temp_value, temp_value, Arguments::freq);
+            std::from_chars(temp_value, temp_value+size_of_temp_value, Arguments::freq);
             Flags::is_freq_alone = false;
         } else {
             std::cerr << "Wrong Input. There is no such argument";

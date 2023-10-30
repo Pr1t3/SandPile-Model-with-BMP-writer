@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Structures.hpp"
-#include "utilities.h"
 
 #include <iostream>
 #include <cstring>

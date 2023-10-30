@@ -18,7 +18,7 @@ struct Flags {
 };
 
 struct Field {
-    inline static int16_t x_size = 0;
-    inline static int16_t y_size = 0;
-    inline static int** field;
+    int16_t x_size = 0;
+    int16_t y_size = 0;
+    int** main_field;
 };
