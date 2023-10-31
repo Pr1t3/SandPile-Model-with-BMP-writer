@@ -9,4 +9,4 @@ add_executable(labwork3_Pr1t3
         ArgumentsParser.cpp
         main.cpp
         SandPileLogic.cpp
-        BMPFilerMaker.cpp)
+        BMPFileMaker.cpp)
