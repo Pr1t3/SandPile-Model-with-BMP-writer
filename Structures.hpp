@@ -8,6 +8,10 @@ struct Arguments {
     inline static char* output_folder;
     inline static uint64_t max_iter = 0;
     inline static uint64_t freq = 0;
+    ~Arguments(){
+        delete[] input_file;
+        delete[] output_folder;
+    }
 };
 
 struct Flags {
@@ -21,4 +25,10 @@ struct Field {
     int16_t x_size = 0;
     int16_t y_size = 0;
     int** main_field;
+    ~Field(){
+        for(int i = 0; i < x_size; ++i){
+            delete[] main_field[i];
+        }
+        delete[] main_field;
+    }
 };
