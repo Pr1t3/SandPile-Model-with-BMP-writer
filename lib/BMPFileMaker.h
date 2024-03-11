@@ -8,7 +8,9 @@
 #include <cstring>
 #include <fstream>
 #include <cmath>
+#include <filesystem>
+#include <string>
 
-void saveBMP(char* filename, Field& main_field);
+void saveBMP(std::string& filename, Field& main_field);
 
-char* makeFileName(int64_t count_of_pictures);
+std::string makeFileName(int64_t count_of_pictures);

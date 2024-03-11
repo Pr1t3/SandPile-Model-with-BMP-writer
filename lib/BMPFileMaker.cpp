@@ -1,7 +1,8 @@
 #include "BMPFileMaker.h"
+#include "Structures.hpp"
 
-char* makeFileName(int64_t count_of_pictures) {
-    size_t size_of_name = static_cast<int>(ceil(log10(count_of_pictures + 1)));
+std::string makeFileName(int64_t count_of_pictures) {
+    /*size_t size_of_name = static_cast<int>(ceil(log10(count_of_pictures + 1)));
     size_t size_of_output_folder = std::strlen(Arguments::output_folder);
     char* name = new char[size_of_name];
     std::to_chars(name, name + size_of_name + 1, count_of_pictures);
@@ -22,7 +23,11 @@ char* makeFileName(int64_t count_of_pictures) {
     filename[size_of_output_folder + size_of_name + 5] = '\0';
     std::cout <<filename << '\n';
     delete[] name;
-    return filename;
+    return filename;*/
+    std::string name = std::to_string(count_of_pictures);
+    name += ".bmp";
+    std::filesystem::path path = std::filesystem::path(Arguments::output_folder) / name;
+    return path.string();
 }
 
 #pragma pack(push, 1)
@@ -48,7 +53,7 @@ struct BMPHeader {
 
 #pragma pack(pop)
 
-void saveBMP(char* filename, Field& main_field) {
+void saveBMP(std::string& filename, Field& main_field) {
     std::ofstream file(filename, std::ios::binary);
     if (!file.is_open()) {
         std::cerr << "Output folder not Found";
@@ -116,6 +121,5 @@ void saveBMP(char* filename, Field& main_field) {
         file.write(reinterpret_cast<char*>(row), width_in_byte + padding);
     }
     delete[] row;
-    delete[] filename;
     file.close();
 }

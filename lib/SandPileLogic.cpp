@@ -1,4 +1,5 @@
 #include "SandPileLogic.h"
+#include "Structures.hpp"
 
 void FillFieldOnStart(std::ifstream& file, Field& main_field) {
     bool is_first = true;
@@ -193,20 +194,20 @@ void Collapse(bool& was_collapsed, Field& main_field) {
 void SandPile(std::ifstream& input_file, Field& main_field) {
     FillFieldOnStart(input_file, main_field);
     int count_of_pictures = 1;
-    char* filename = makeFileName(count_of_pictures);
+    std::string filename = makeFileName(count_of_pictures);
     saveBMP(filename, main_field);
     int count_of_iterations = 0;
     bool was_collapsed = false;
     while (count_of_iterations != Arguments::max_iter && was_collapsed || count_of_iterations == 0) {
         Collapse(was_collapsed, main_field);
         ++count_of_iterations;
-        if (count_of_iterations % Arguments::freq == 0) {
+        if (Arguments::freq != 0 && count_of_iterations % Arguments::freq == 0) {
             ++count_of_pictures;
-            char* filename = makeFileName(count_of_pictures);
+            std::string filename = makeFileName(count_of_pictures);
             saveBMP(filename, main_field);
         }
     }
-    if (!(count_of_iterations == 1 && !was_collapsed) && count_of_iterations % Arguments::freq != 0) {
+    if (Arguments::freq == 0 || !(count_of_iterations == 1 && !was_collapsed) && count_of_iterations % Arguments::freq != 0) {
         ++count_of_pictures;
         filename = makeFileName(count_of_pictures);
         saveBMP(filename, main_field);
