@@ -1,12 +1,11 @@
-cmake_minimum_required(VERSION 3.16)
-project(labwork3_Pr1t3)
+cmake_minimum_required(VERSION 3.12)
+
+project(
+    sand_pile_model
+)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(.)
 
-add_executable(labwork3_Pr1t3
-        ArgumentsParser.cpp
-        main.cpp
-        SandPileLogic.cpp
-        BMPFileMaker.cpp)
+add_subdirectory(lib)
+add_subdirectory(bin)
